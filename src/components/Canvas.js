@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Canvas.css';
+import Container from '../core/playground';
 
 const Canvas = () => (
     <div>
