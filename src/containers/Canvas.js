@@ -3,7 +3,7 @@ import './Canvas.css';
 import Container from '../core/playground';
 
 const Canvas = () => (
-    <div>
+    <div className="App-canvas">
         <h2 className="title">Canvas</h2>
     </div>
 )

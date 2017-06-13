@@ -5,7 +5,10 @@ import {
     Switch
 } from 'react-router';
 import logo from './logo.svg';
-import Canvas from './components/Canvas';
+import {
+    Canvas,
+    Self
+} from './containers';
 import './App.css';
 import Loader from './core/loader';
 
@@ -23,9 +26,12 @@ const App = ({name}) => {
                 <img src={logo} className="App-logo" alt="logo" />
                 <h2>Welcome to SanPlay</h2>
             </div>
-            <Canvas/>
-            <p className="App-intro">
-            </p>
+            <div className="App-main">
+                <Self />
+                <Canvas/>
+                <div className="App-enemy">
+                </div>
+            </div>
         </div>
     )
 }

@@ -5,11 +5,13 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
+import reducer from './reducer'
 
-let store = createStore(todoApp)
+let store = createStore(reducer)
 
 ReactDOM.render(
     <Provider store={store}>
         <App />
-    </Provider>, document.getElementById('root'));
+    </Provider>
+  , document.getElementById('root'));
 registerServiceWorker();

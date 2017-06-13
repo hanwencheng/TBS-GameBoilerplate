@@ -13,8 +13,24 @@
     color: white;
   }
 
-  .App-intro {
-    font-size: large;
+  .App-main {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    align-content: flex-start;
+    .App-canvas {
+      flex: 1 0 512px;
+      border: black solid thin;
+    }
+
+    .App-self {
+      flex: 1 0 100px;
+      font-size: large;
+    }
+
+    .App-enemy {
+      flex: 1 0 100px;
+    }
   }
 }
 
