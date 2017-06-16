@@ -10,12 +10,13 @@ import {
     Self
 } from './containers';
 import './App.css';
+import hanwenc from './hanwen'
 import Loader from './core/loader';
 
-const App = ({name}) => {
+const App = (props) => {
 
     const init = () => {
-        console.log('loader is', Loader)
+      console.log('props in APP are', props)
     };
 
     init();
@@ -36,4 +37,4 @@ const App = ({name}) => {
     )
 }
 
-export default App;
+export default hanwenc(App);

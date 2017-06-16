@@ -3,15 +3,20 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import reducer from './reducer'
+import {store} from './hanwen'
 
-let store = createStore(reducer)
+const render = () => {
+  ReactDOM.render(
+    <App string="haha"/>
+    , document.getElementById('root'));
+  registerServiceWorker();
+}
 
-ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
-  , document.getElementById('root'));
-registerServiceWorker();
+store.subscribe(render);
+
+render()
+
+
+
+
+
