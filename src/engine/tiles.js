@@ -28,11 +28,12 @@ var tiles =
  "renderorder":"right-down",
  "tiledversion":"1.0.1",
  "tileheight":16,
- "tilesets":[
-  {
+ "tilesets":
+  {"column":21,
+   "row":9,
    "firstgid":1,
    "source":"overWold.tsx"
-  }],
+  },
  "tilewidth":16,
  "type":"map",
  "version":1,

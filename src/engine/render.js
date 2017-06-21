@@ -3,8 +3,11 @@ import Keyboard from '../core/keyboard'
 import map from './tiles'
 import {canvasSize, maximumDelta} from '../constant'
 import Camera from './camera'
+import png from './tiles.png'
 
-const getTile = (map, layerNumber, col, row) => map.layers[layerNumber].data[map.width * row + col]
+const getTile = (map, layerNumber, col, row) => {
+  return map.layers[layerNumber].data[map.width * row + col]
+}
 
 var Render = function(){
 
@@ -12,7 +15,7 @@ var Render = function(){
 
 Render.load = function () {
   return [
-    Loader.loadImage('tiles', '../engine/tiles.png'),
+    Loader.loadImage('tiles', png),
   ];
 };
 
@@ -43,16 +46,20 @@ Render._drawLayer = function (layer) {
   var offsetX = -this.camera.x + startCol * map.tilewidth;
   var offsetY = -this.camera.y + startRow * map.tileheight;
 
+
   for (var c = startCol; c <= endCol; c++) {
     for (var r = startRow; r <= endRow; r++) {
       var tile = getTile(map, layer, c, r);
       var x = (c - startCol) * map.tilewidth + offsetX;
       var y = (r - startRow) * map.tileheight + offsetY;
+      var sx = (tile % map.tilesets.column - 1) * map.tilewidth;
+      var sy = Math.floor(tile/map.tilesets.column) * map.tileheight;
+      // console.log(`tile: ${tile}, x: ${x}, y: ${y}, sx: ${sx}, sy: ${sy}`)
       if (tile !== 0) { // 0 => empty tile
         this.ctx.drawImage(
           this.tileAtlas, // image
-          (tile - 1) * map.tilewidth, // source x
-          0, // source y
+          sx,  // source x
+          sy, // source y
           map.tilewidth, // source width
           map.tileheight, // source height
           Math.round(x),  // target x
@@ -94,7 +101,7 @@ Render.tick = function (elapsed) {
 Render.render = function () {
   // draw map background layer
   this._drawLayer(0);
-  // draw map top layer
+  // draw map terrain layer
   this._drawLayer(1);
 };
 
