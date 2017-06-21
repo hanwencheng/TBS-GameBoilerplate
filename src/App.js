@@ -4,7 +4,7 @@ import {
     Route,
     Switch
 } from 'react-router';
-import logo from './logo.svg';
+import logo from './wu.png';
 import {
     Canvas,
     Self
