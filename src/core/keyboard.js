@@ -1,13 +1,10 @@
-var Keyboard = {};
+import {keyboard} from '../constant'
 
-Keyboard.LEFT = 37;
-Keyboard.RIGHT = 39;
-Keyboard.UP = 38;
-Keyboard.DOWN = 40;
+var Keyboard = {};
 
 Keyboard._keys = {};
 
-Keyboard.listenForEvents = function (keys) {
+Keyboard.registerKey = function (keys) {
   window.addEventListener('keydown', this._onKeyDown.bind(this));
   window.addEventListener('keyup', this._onKeyUp.bind(this));
 

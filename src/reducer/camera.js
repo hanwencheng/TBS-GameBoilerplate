@@ -16,9 +16,10 @@ const camera = (state = {
   maxX: getMaxX(defaultMap, defaultCanvasSize),
   maxY: getMaxY(defaultMap, defaultCanvasSize),
 }, action ) => {
+  let neu;
   switch (action.type){
     case types.init:
-      const neu = {...state,
+      neu = {...state,
         maxX: getMaxX(action.map, action.width),
         maxY: getMaxY(action.map, action.height),
         width: action.width,
@@ -27,11 +28,15 @@ const camera = (state = {
       return neu
 
     case types.move:
-      const change = (origin, dir) => origin + action.delta * state.SPEED + dir
-      return {...state,
-        x: change(state.x, action.dirX),
-        y: change(state.y, action.dirY)
-      };
+      const change = (origin, dir, max) => {
+        var computed = origin + action.delta * state.SPEED * dir
+        return Math.max(0, Math.min(computed, max));
+      }
+      neu = {...state,
+        x: change(state.x, action.dirX, state.maxX),
+        y: change(state.y, action.dirY, state.maxY),
+      }
+      return neu;
 
     default : return state
   }

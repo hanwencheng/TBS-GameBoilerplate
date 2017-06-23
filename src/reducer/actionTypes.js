@@ -1,7 +1,13 @@
 const camera = {
-  init: 'CAMERA_INIT',
-  move: 'CAMERA_MOVE'
+  init: 'CAMERA_init',
+  move: 'CAMERA_move'
 }
+
+// const render = {
+//   init: 'RENDER_init',
+//   load: 'RENDER_load',
+//   drawLayer: 'RENDER_drawLayer'
+// }
 
 const hero = {
 
