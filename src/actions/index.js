@@ -1,7 +1,13 @@
+import types from '../reducer/actionTypes';
 
-export const createHero = (hero) => {
-  return {
-    type: 'Create_hero',
-    hero: hero,
-  }
+const camera = {
+  init: (map, width, height) => ({type: types.camera.init, map, width, height}),
+  move: (delta, dirX, dirY) => ({type: types.camera.move, delta, dirX, dirY})
 }
+
+export default {
+  camera
+}
+
+
+

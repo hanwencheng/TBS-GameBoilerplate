@@ -27,14 +27,16 @@ var tiles =
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.1",
- "tileheight":16,
+ "tileheight":32,
  "tilesets":
   {"column":21,
    "row":9,
+   "width":16,
+   "height":16,
    "firstgid":1,
    "source":"overWold.tsx"
   },
- "tilewidth":16,
+ "tilewidth":32,
  "type":"map",
  "version":1,
  "width":30,

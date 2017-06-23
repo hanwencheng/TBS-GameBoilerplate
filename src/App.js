@@ -13,28 +13,29 @@ import './App.css';
 import hanwenc from './hanwen'
 import Loader from './core/loader';
 
-const App = (props) => {
+class App extends Component {
 
-    const init = () => {
-      console.log('props in APP are', props)
-    };
+  constructor(props){
+    super(props)
+  }
 
-    init();
-
+  render(){
     return (
-        <div className="App">
-            <div className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <h2>Welcome to SanPlay</h2>
-            </div>
-            <div className="App-main">
-                <Self />
-                <Canvas/>
-                <div className="App-enemy">
-                </div>
-            </div>
+      <div className="App">
+        <div className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h2>Welcome to SanPlay</h2>
         </div>
+        <div className="App-main">
+          <Self />
+          <Canvas/>
+          <div className="App-enemy">
+          </div>
+        </div>
+      </div>
     )
+  }
+
 }
 
 export default hanwenc(App);

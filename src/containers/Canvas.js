@@ -17,7 +17,6 @@ class Canvas extends Component {
     Render.run(context);
   }
 
-
   render(){
     return (
       <div className = "App-canvas" id="canvas">

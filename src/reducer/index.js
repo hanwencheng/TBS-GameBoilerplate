@@ -1,8 +1,14 @@
 import { combineReducers } from 'redux'
 import heros from './heros';
+import camera from './camera'
 
 const app = combineReducers ({
-  heros
+  main: combineReducers({
+    heros
+  }),
+  canvas: combineReducers({
+    camera
+  })
 })
 
 export default app
