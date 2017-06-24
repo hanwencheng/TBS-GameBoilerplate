@@ -10,8 +10,8 @@ import {
     Self
 } from './containers';
 import './App.css';
-import hanwenc from './hanwen'
-import Loader from './core/loader';
+import {default as hanwenc, store }from './hanwen'
+import DevTools from './helper/DevTool'
 
 class App extends Component {
 
@@ -32,6 +32,7 @@ class App extends Component {
           <div className="App-enemy">
           </div>
         </div>
+        <DevTools store={store}/>
       </div>
     )
   }
