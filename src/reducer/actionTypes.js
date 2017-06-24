@@ -3,11 +3,12 @@ const camera = {
   move: 'CAMERA_move'
 }
 
-// const render = {
-//   init: 'RENDER_init',
-//   load: 'RENDER_load',
-//   drawLayer: 'RENDER_drawLayer'
-// }
+const images = {
+  load: 'IMAGES_load',
+  clear: 'IMAGES_clear',
+  start: 'IMAGES_start',
+  error: 'IMAGES_error',
+}
 
 const hero = {
 
@@ -15,8 +16,9 @@ const hero = {
 
 const actionTypes = {
   camera,
-  hero
+  hero,
+  images,
 }
 
 export default actionTypes;
-export {camera, hero}
+export {camera, hero, images}

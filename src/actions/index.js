@@ -1,3 +1,10 @@
+/**
+ * This file is only used for hanwen.js
+ *
+ * And used for indexing actions.
+ * components should not access this file directly.
+ */
+
 import types from '../reducer/actionTypes';
 
 const camera = {
@@ -5,15 +12,16 @@ const camera = {
   move: (delta, dirX, dirY) => ({type: types.camera.move, delta, dirX, dirY})
 }
 
-export default {
-  camera
+const images = {
+  load: (key, value) => ({type: types.images.load, key, value}),
+  start: (number) => ({type: types.images.start, number}),
+  error: (error) => ({type: types.images.error, error}),
+  clear: () => ({types: types.images.clear})
 }
 
-var a = {
-  b: {
-    c: 'haha',
-    d: 'heihe'
-  }
+export default {
+  camera,
+  images,
 }
 
 

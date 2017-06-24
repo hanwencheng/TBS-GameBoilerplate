@@ -4,11 +4,11 @@ import Container from '../core/playground';
 import {canvasSize, maximumDelta} from '../constant'
 import {drawLayers} from '../engine/render'
 import hanwenc from '../hanwen'
-import Loader from '../core/loader'
+import loader from '../core/loader'
 import Keyboard from '../core/keyboard'
 import {keyboard} from '../constant'
 import map from '../engine/tiles'
-import png from '../engine/tiles.png'
+import sprites from '../engine/sprites';
 
 class Canvas extends Component {
 
@@ -18,18 +18,13 @@ class Canvas extends Component {
 
   componentDidMount(){
     var that = this;
+    var imageStore = this.props.canvas.images
     var tileAtlas;
-
-    const load = function () {
-      return [
-        Loader.loadImage('tiles', png),
-      ];
-    };
 
     const init = function () {
       Keyboard.registerKey(
         [keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
-      tileAtlas = Loader.getImage('tiles');
+      tileAtlas = loader.getImage(imageStore, 'tiles');
       that.props.actions.camera.init(map, canvasSize, canvasSize)
     };
 
@@ -69,7 +64,7 @@ class Canvas extends Component {
     // console.log('in canvas props are', this.props)
     var context = document.getElementById('demo').getContext('2d');
     var _previousElapsed = 0;
-    var p = load();
+    var p = loader.loadList(imageStore, this.props.actions, sprites);
     Promise.all(p).then(function (loaded) {
       init();
       window.requestAnimationFrame(tick);

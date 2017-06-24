@@ -1,4 +1,4 @@
-const canvasSize = 320
+const canvasSize = 640
 const maximumDelta = 1/30
 
 const keyboard = {
