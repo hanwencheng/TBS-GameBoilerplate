@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Canvas.css';
 import Container from '../core/playground';
 import {canvasSize, maximumDelta} from '../constant'
-import {drawLayer} from '../engine/render'
+import {drawLayers} from '../engine/render'
 import hanwenc from '../hanwen'
 import Loader from '../core/loader'
 import Keyboard from '../core/keyboard'
@@ -63,10 +63,7 @@ class Canvas extends Component {
     };
 
     const render = function () {
-      // draw map background layer
-      drawLayer(context, 0, that.props.canvas.camera, tileAtlas);
-      // draw map terrain layer
-      drawLayer(context, 1, that.props.canvas.camera, tileAtlas);
+      drawLayers(context, that.props.canvas.camera, tileAtlas);
     };
 
     // console.log('in canvas props are', this.props)

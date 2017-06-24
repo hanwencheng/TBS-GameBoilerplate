@@ -7,6 +7,7 @@ const heroInput = (props) => {
   const onChange = (event) => {
     value = event.target.value
     console.log('change event is', value)
+
   }
   return (
     <div className="basics-input">
@@ -16,7 +17,6 @@ const heroInput = (props) => {
       </label>
     </div>
   )
-
 }
 
 export default heroInput
