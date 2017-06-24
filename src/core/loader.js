@@ -6,7 +6,7 @@ const loadImage = function (imagesStore, actions, key, src) {
   var d = new Promise(function (resolve, reject) {
     img.onload = function () {
       actions.images.load(key, img)
-      resolve(img);
+      resolve(_.set({}, key, img));
     };
 
     img.onerror = function () {

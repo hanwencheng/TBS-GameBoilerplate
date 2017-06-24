@@ -19,9 +19,14 @@ const images = {
   clear: () => ({types: types.images.clear})
 }
 
+const heroes = {
+  init: (spriteList) => ({type: types.heroes.init, spriteList}),
+}
+
 export default {
   camera,
   images,
+  heroes,
 }
 
 

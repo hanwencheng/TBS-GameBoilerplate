@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
-import heros from './heros';
+import heroes from './heroes';
 import camera from './camera'
 import images from './images'
 
 const app = combineReducers ({
   main: combineReducers({
-    heros
+    heroes
   }),
   canvas: combineReducers({
     camera,

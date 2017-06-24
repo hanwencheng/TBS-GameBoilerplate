@@ -1,4 +1,6 @@
 import map from './tiles'
+import loader from '../core/loader';
+import _ from 'lodash'
 
 const getTile = (map, layer, col, row) => {
   return layer.data[map.width * row + col]
@@ -43,11 +45,37 @@ const drawLayers = function (canvas, camera, atlas) {
 
 };
 
+const drawHeroes = (canvas, store, camera, heroes) => {
+  _.forIn(heroes, (hero, heroId) => {
+    let offsetX = hero.x - camera.x;
+    let offsetY = hero.y - camera.y;
+    let image = loader.getImage(store, hero.sprite);
+
+    if(offsetX < -hero.width || offsetY < -hero.height)
+      return;
+
+    canvas.drawImage(
+      image,
+      0,
+      0,
+      hero.width,
+      hero.height,
+      offsetX,
+      offsetY,
+      hero.width,
+      hero.height,
+    )
+    }
+  )
+}
+
 const render ={
   drawLayers,
+  drawHeroes,
 }
 
 export {
   render as default,
-  drawLayers
+  drawLayers,
+  drawHeroes,
 }

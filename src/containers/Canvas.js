@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Canvas.css';
 import Container from '../core/playground';
 import {canvasSize, maximumDelta} from '../constant'
-import {drawLayers} from '../engine/render'
+import {drawLayers, drawHeroes} from '../engine/render'
 import hanwenc from '../hanwen'
 import loader from '../core/loader'
 import Keyboard from '../core/keyboard'
@@ -59,6 +59,7 @@ class Canvas extends Component {
 
     const render = function () {
       drawLayers(context, that.props.canvas.camera, tileAtlas);
+      drawHeroes(context, imageStore, that.props.canvas.camera, that.props.store.heroes);
     };
 
     // console.log('in canvas props are', this.props)
@@ -66,6 +67,8 @@ class Canvas extends Component {
     var _previousElapsed = 0;
     var p = loader.loadList(imageStore, this.props.actions, sprites);
     Promise.all(p).then(function (loaded) {
+      console.log('loaded are', loaded)
+      // this.props.actions.heroes.create()
       init();
       window.requestAnimationFrame(tick);
     });

@@ -10,15 +10,15 @@ const images = {
   error: 'IMAGES_error',
 }
 
-const hero = {
-
+const heroes = {
+  init: 'HEROES_init'
 }
 
 const actionTypes = {
   camera,
-  hero,
+  heroes,
   images,
 }
 
 export default actionTypes;
-export {camera, hero, images}
+export {camera, heroes, images}
