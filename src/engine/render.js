@@ -1,11 +1,4 @@
-import Loader from '../core/loader'
-import Keyboard from '../core/keyboard'
-import {keyboard} from '../constant'
 import map from './tiles'
-import {canvasSize, maximumDelta} from '../constant'
-import actions from '../actions'
-import png from './tiles.png'
-import {dispatch, store} from '../hanwen';
 
 const getTile = (map, layerNumber, col, row) => {
   return map.layers[layerNumber].data[map.width * row + col]

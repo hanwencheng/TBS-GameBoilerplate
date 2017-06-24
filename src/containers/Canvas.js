@@ -7,7 +7,6 @@ import hanwenc from '../hanwen'
 import Loader from '../core/loader'
 import Keyboard from '../core/keyboard'
 import {keyboard} from '../constant'
-import actions from '../actions'
 import map from '../engine/tiles'
 import png from '../engine/tiles.png'
 
@@ -31,7 +30,7 @@ class Canvas extends Component {
       Keyboard.registerKey(
         [keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
       tileAtlas = Loader.getImage('tiles');
-      that.props.dispatch(actions.camera.init(map, canvasSize, canvasSize))
+      that.props.actions.camera.init(map, canvasSize, canvasSize)
     };
 
     const update = function (delta) {
@@ -43,7 +42,7 @@ class Canvas extends Component {
       if (Keyboard.isDown(keyboard.UP)) { diry = -1; }
       if (Keyboard.isDown(keyboard.DOWN)) { diry = 1; }
 
-      that.props.dispatch(actions.camera.move(delta, dirx, diry))
+      that.props.actions.camera.move(delta, dirx, diry)
     };
 
 

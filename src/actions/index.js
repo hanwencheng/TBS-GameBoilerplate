@@ -9,5 +9,12 @@ export default {
   camera
 }
 
+var a = {
+  b: {
+    c: 'haha',
+    d: 'heihe'
+  }
+}
+
 
 
