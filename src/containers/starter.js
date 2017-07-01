@@ -4,6 +4,7 @@ import loader from '../core/loader'
 import {canvasSize, maximumDelta} from '../constant'
 import {drawLayers, drawHeroes} from '../engine/render'
 import map from '../engine/tiles'
+import _ from 'lodash'
 
 //module local state;
 let tileAtlas, canvasEl, context,
@@ -26,16 +27,17 @@ const _updateCanvas = () => {
   context.clearRect(0, 0, canvasSize, canvasSize);
 }
 
-const init = function (props) {
+const initCanvas = function (props) {
   canvasEl = document.getElementById('demo');
   context = canvasEl.getContext('2d');
   Keyboard.registerKey(
     [keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
   tileAtlas = loader.getImage(props.canvas.images, 'tiles');
-  props.actions.camera.init(map, canvasSize, canvasSize);
+  props.actions.camera.init(map, canvasSize, canvasSize)
+  props.actions.context.setSize(canvasEl.getBoundingClientRect());
 };
 
-const update = (props, elapsed) => {
+const updateCanvas = (props, elapsed) => {
 
   // compute delta time in seconds -- also cap it
   var delta = (elapsed - _previousElapsed) / 1000.0;
@@ -54,23 +56,36 @@ const renderCanvas = function (props) {
   drawHeroes(context, images, camera, heroes);
 };
 
-const selectSprite = (evt) => {
-  var mousePos = getMousePos(context, evt);
-  var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-};
+const _getMousePosition = (canvasSize, evt) => ({
+  x: evt.clientX - canvasSize.left,
+  y: evt.clientY - canvasSize.top,
+})
 
-function getMousePos(canvas, evt) {
-  var rect = canvas.getBoundingClientRect();
-  return {
-    x: evt.clientX - rect.left,
-    y: evt.clientY - rect.top
-  };
+const _isInSprite = (sprites, mousePosition) => {
+  const includeX = sprites.left <= mousePosition.x && mousePosition.x <= sprites.right;
+  const includeY = sprites.top <= mousePosition.y && mousePosition.y <= sprites.bottom;
+  return includeX && includeY;
 }
 
+const selectSprite = (evt, props) => {
+  var mousePos = _getMousePosition(props.canvas.context.size, evt);
+  var rectList = props.store.heroes.sortedMap
 
-
-const tick = function (props) {
-
+  var found;
+  for(let i = rectList.length - 1; i >= 0 ;i-- ){
+    let rect = rectList[i];
+    if(_isInSprite(rect, mousePos)){
+      found = props.store.heroes.data[rect.id];
+      break;
+    }
+  }
+  console.log('found is', found)
+  return found;
 };
 
-export {update, init, renderCanvas}
+
+
+
+export {
+  updateCanvas, initCanvas, renderCanvas, selectSprite
+}

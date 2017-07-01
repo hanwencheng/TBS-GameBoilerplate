@@ -6,7 +6,7 @@ import {canvasSize, maximumDelta} from '../constant'
 import hanwenc from '../hanwen'
 import loader from '../core/loader'
 import sprites from '../engine/sprites';
-import {init, update, renderCanvas} from './starter';
+import * as canvasUtil from './starter';
 
 class Canvas extends Component {
 
@@ -21,22 +21,27 @@ class Canvas extends Component {
 
     const tick = (elapsed) => {
       window.requestAnimationFrame(tick);
-      update(that.props, elapsed);
-      renderCanvas(that.props);
+      canvasUtil.updateCanvas(that.props, elapsed);
+      canvasUtil.renderCanvas(that.props);
     }
 
     Promise.all(p).then(function (loaded) {
       console.log('loaded are', loaded)
-      init(that.props);
+      canvasUtil.initCanvas(that.props);
       window.requestAnimationFrame(tick);
     });
   }
 
   render(){
+
+    const onMouseMove = (event) => {
+      canvasUtil.selectSprite(event, this.props)
+    }
+
     return (
       <div className = "App-canvas" id="canvas">
         <h2 className = "title" > Canvas </h2 >
-        <canvas id="demo" width={canvasSize} height={canvasSize} />
+        <canvas id="demo" width={canvasSize} height={canvasSize} onMouseMove={onMouseMove}/>
       </div >
     )
   }

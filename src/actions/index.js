@@ -23,10 +23,15 @@ const heroes = {
   init: (spriteList) => ({type: types.heroes.init, spriteList}),
 }
 
+const context = {
+  setSize: (size) => ({type: types.context.setSize, size})
+}
+
 export default {
   camera,
   images,
   heroes,
+  context
 }
 
 

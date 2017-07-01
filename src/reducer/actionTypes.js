@@ -14,11 +14,16 @@ const heroes = {
   init: 'HEROES_init'
 }
 
+const context = {
+  setSize: 'CONTEXT_setSize',
+}
+
 const actionTypes = {
   camera,
   heroes,
   images,
+  context,
 }
 
 export default actionTypes;
-export {camera, heroes, images}
+export {camera, heroes, images, context}

@@ -21,8 +21,13 @@ const initDataSet = {
   sortedMap: []
 }
 
-const objectIntoArray = (result, value, key) => {
-  result.push({x: value.x, id: key});
+const objectIntoArray = (result, object, key) => {
+  result.push({
+    left: object.x,
+    right: object.x + object.width,
+    top: object.y,
+    bottom: object.y + object.height,
+    id: key});
   return result
 };
 
