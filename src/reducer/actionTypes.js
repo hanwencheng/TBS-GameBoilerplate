@@ -16,6 +16,8 @@ const heroes = {
 
 const context = {
   setSize: 'CONTEXT_setSize',
+  setSelection: 'CONTEXT_setSelection',
+  setHighlight: 'CONTEXT_setHighlight',
 }
 
 const actionTypes = {

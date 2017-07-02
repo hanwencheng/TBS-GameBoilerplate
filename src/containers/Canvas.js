@@ -14,6 +14,10 @@ class Canvas extends Component {
     super(props);
   }
 
+  updateContextDimension = () => {
+    canvasUtil.setContextSize(this.props)
+  }
+
   componentDidMount(){
     var that = this;
     var p = loader.loadList(this.props.canvas.images, this.props.actions, sprites);
@@ -28,8 +32,14 @@ class Canvas extends Component {
     Promise.all(p).then(function (loaded) {
       console.log('loaded are', loaded)
       canvasUtil.initCanvas(that.props);
+      window.addEventListener("resize", that.updateContextDimension);
       window.requestAnimationFrame(tick);
     });
+  }
+
+  componentWillUnmount(){
+    //window.cancelAnimationFrame(requestID);
+    window.removeEventListener("resize", this.updateContextDimension);
   }
 
   render(){

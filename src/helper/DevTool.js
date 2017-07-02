@@ -8,7 +8,8 @@ import types from '../reducer/actionTypes';
 
 export default createDevTools(
   <FilterMonitor blacklist={[
-    types.camera.move
+    types.camera.move,
+    types.context.highlight
   ]}>
   <DockMonitor toggleVisibilityKey='ctrl-h'
                changePositionKey='ctrl-q'

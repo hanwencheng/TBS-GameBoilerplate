@@ -7,7 +7,8 @@ import {
 import logo from './wu.png';
 import {
     Canvas,
-    Self
+    Self,
+    Enemy,
 } from './containers';
 import './App.css';
 import {default as hanwenc, store }from './hanwen'
@@ -29,6 +30,7 @@ class App extends Component {
         <div className="App-main">
           <Self />
           <Canvas/>
+          <Enemy/>
           <div className="App-enemy">
           </div>
         </div>

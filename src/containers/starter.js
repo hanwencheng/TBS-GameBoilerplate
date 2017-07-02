@@ -27,6 +27,8 @@ const _updateCanvas = () => {
   context.clearRect(0, 0, canvasSize, canvasSize);
 }
 
+const setContextSize = (props) => props.actions.context.setSize(canvasEl.getBoundingClientRect())
+
 const initCanvas = function (props) {
   canvasEl = document.getElementById('demo');
   context = canvasEl.getContext('2d');
@@ -34,7 +36,7 @@ const initCanvas = function (props) {
     [keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
   tileAtlas = loader.getImage(props.canvas.images, 'tiles');
   props.actions.camera.init(map, canvasSize, canvasSize)
-  props.actions.context.setSize(canvasEl.getBoundingClientRect());
+  setContextSize(props);
 };
 
 const updateCanvas = (props, elapsed) => {
@@ -61,10 +63,16 @@ const _getMousePosition = (canvasSize, evt) => ({
   y: evt.clientY - canvasSize.top,
 })
 
-const _isInSprite = (sprites, mousePosition) => {
-  const includeX = sprites.left <= mousePosition.x && mousePosition.x <= sprites.right;
-  const includeY = sprites.top <= mousePosition.y && mousePosition.y <= sprites.bottom;
-  return includeX && includeY;
+const _isInSprite = (sprites, mousePosition, camera) => {
+  console.log('camera.x ', mousePosition.x)
+  let relateX = mousePosition.x + camera.x;
+  let relateY = mousePosition.y + camera.y;
+  return (
+  sprites.left <= relateX &&
+  relateX <= sprites.right &&
+  sprites.top <= relateY &&
+  relateY <= sprites.bottom
+  )
 }
 
 const selectSprite = (evt, props) => {
@@ -74,12 +82,16 @@ const selectSprite = (evt, props) => {
   var found;
   for(let i = rectList.length - 1; i >= 0 ;i-- ){
     let rect = rectList[i];
-    if(_isInSprite(rect, mousePos)){
-      found = props.store.heroes.data[rect.id];
+    if(_isInSprite(rect, mousePos, props.canvas.camera)){
+      found = rect.id
       break;
     }
   }
   console.log('found is', found)
+  if ( found && props.canvas.context.highlight !== found){
+
+    props.actions.context.setHighlight(found);
+  }
   return found;
 };
 
@@ -87,5 +99,5 @@ const selectSprite = (evt, props) => {
 
 
 export {
-  updateCanvas, initCanvas, renderCanvas, selectSprite
+  updateCanvas, initCanvas, renderCanvas, selectSprite, setContextSize
 }
