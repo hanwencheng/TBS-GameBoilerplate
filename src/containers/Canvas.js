@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Canvas.css';
 import Container from '../core/playground';
 import {canvasSize, maximumDelta} from '../constant'
-
+import _ from 'lodash'
 import hanwenc from '../hanwen'
 import loader from '../core/loader'
 import sprites from '../engine/sprites';
@@ -44,14 +44,16 @@ class Canvas extends Component {
 
   render(){
 
-    const onMouseMove = (event) => {
-      canvasUtil.selectSprite(event, this.props)
-    }
+    const onMouseMove = _.partial(canvasUtil.hoverSprite, _, this.props)
+    const onClick = _.partial(canvasUtil.clickSprite, _, this.props)
 
     return (
       <div className = "App-canvas" id="canvas">
         <h2 className = "title" > Canvas </h2 >
-        <canvas id="demo" width={canvasSize} height={canvasSize} onMouseMove={onMouseMove}/>
+        <canvas id="demo" width={canvasSize} height={canvasSize}
+                onMouseMove={onMouseMove}
+                onClick={onClick}
+        />
       </div >
     )
   }

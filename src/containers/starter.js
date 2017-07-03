@@ -64,7 +64,6 @@ const _getMousePosition = (canvasSize, evt) => ({
 })
 
 const _isInSprite = (sprites, mousePosition, camera) => {
-  console.log('camera.x ', mousePosition.x)
   let relateX = mousePosition.x + camera.x;
   let relateY = mousePosition.y + camera.y;
   return (
@@ -75,10 +74,9 @@ const _isInSprite = (sprites, mousePosition, camera) => {
   )
 }
 
-const selectSprite = (evt, props) => {
+const _selectSprite = (evt, props) => {
   var mousePos = _getMousePosition(props.canvas.context.size, evt);
   var rectList = props.store.heroes.sortedMap
-
   var found;
   for(let i = rectList.length - 1; i >= 0 ;i-- ){
     let rect = rectList[i];
@@ -87,17 +85,33 @@ const selectSprite = (evt, props) => {
       break;
     }
   }
-  console.log('found is', found)
-  if ( found && props.canvas.context.highlight !== found){
+  return found
+}
 
+
+const hoverSprite = (evt, props) => {
+  var found = _selectSprite(evt, props)
+  if ( found && props.canvas.context.highlight !== found){
     props.actions.context.setHighlight(found);
   }
   return found;
 };
 
-
+const clickSprite = (evt, props) => {
+  var found = [].concat(_selectSprite(evt, props))
+  if( found && props.canvas.context.highlight !== found) {
+    props.actions.context.setSelection(found);
+  } else {
+    props.actions.context.setSelection(null);
+  }
+}
 
 
 export {
-  updateCanvas, initCanvas, renderCanvas, selectSprite, setContextSize
+  updateCanvas,
+  initCanvas,
+  renderCanvas,
+  hoverSprite,
+  setContextSize,
+  clickSprite
 }
