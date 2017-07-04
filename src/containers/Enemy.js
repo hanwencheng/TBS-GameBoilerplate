@@ -10,14 +10,20 @@ const Enemy = (props) => {
     selectionSprite = selectionId.length ?
       props.store.heroes.data[selectionId[0]] : {}; //TODO
   return (
-    <div>
+    <div className="App-enemy">
+      <div >
+        Hover :
       {_.map(highLightSprite, (value, key)=> (
         <div>{key} : {value}</div>
       ))}
+      </div>
 
+      <div>
+        Select :
       {_.map(selectionSprite, (value, key)=> (
         <div>{key} : {value}</div>
       ))}
+      </div>
     </div>
 
   )

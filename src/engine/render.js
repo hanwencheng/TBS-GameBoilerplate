@@ -47,8 +47,10 @@ const drawLayers = function (canvas, camera, atlas) {
 
 const drawHeroes = (canvas, store, camera, heroes) => {
   _.forIn(heroes, (hero, heroId) => {
-    let offsetX = hero.x - camera.x;
-    let offsetY = hero.y - camera.y;
+    const scaleX = hero.x * map.tilewidth;
+    const scaleY = hero.y * map.tileheight;
+    let offsetX = scaleX - camera.x;
+    let offsetY = scaleY - camera.y;
     let image = loader.getImage(store, hero.sprite);
 
     if(offsetX < -hero.width || offsetY < -hero.height)
@@ -62,20 +64,55 @@ const drawHeroes = (canvas, store, camera, heroes) => {
       hero.height,
       offsetX,
       offsetY,
-      hero.width,
-      hero.height,
+      map.tilewidth,
+      map.tileheight,
     )
     }
   )
 }
 
-const render ={
-  drawLayers,
-  drawHeroes,
+const drawUI = (canvas, select, heroes) => {
+  if(select.length === 1){
+    const unit = heroes[select[0]],
+      scaleX = unit.x * map.tilewidth,
+      scaleY = unit.y * map.tileheight,
+      range = unit.movement,
+      maxX = scaleX + (range + 1) * map.tilewidth,
+      minX = scaleX - range * map.tilewidth,
+      maxY = scaleY + (range + 1) * map.tileheight,
+      minY = scaleY - range * map.tileheight;
+      let towardRight = true,
+      towardBottom = false,
+      isXChange = true,
+      pointerX = scaleX,
+      pointerY = scaleY - range * map.tileheight;
+
+    canvas.fillStyle = "rgba(255, 0, 0, 0.5)";
+    canvas.beginPath();
+    canvas.moveTo(pointerX, pointerY)
+    do{
+      if(isXChange){
+        if(pointerX === maxX || pointerX === minX)
+          towardRight = !towardRight;
+        pointerX += towardRight ? map.tilewidth : - map.tilewidth;
+      } else {
+        if(pointerY === maxY || pointerY === minY)
+          towardBottom = !towardBottom;
+        pointerY += towardBottom ? map.tileheight : - map.tileheight;
+      }
+      isXChange = !isXChange;
+      canvas.lineTo(pointerX, pointerY)
+    } while (
+      pointerX !== scaleX ||
+      pointerY !==scaleY - range * map.tileheight)
+
+    canvas.closePath();
+    canvas.fill();
+  }
 }
 
 export {
-  render as default,
   drawLayers,
   drawHeroes,
+  drawUI,
 }

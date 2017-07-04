@@ -2,7 +2,7 @@ import Keyboard from '../core/keyboard';
 import {keyboard} from '../constant'
 import loader from '../core/loader'
 import {canvasSize, maximumDelta} from '../constant'
-import {drawLayers, drawHeroes} from '../engine/render'
+import {drawLayers, drawHeroes, drawUI} from '../engine/render'
 import map from '../engine/tiles'
 import _ from 'lodash'
 
@@ -53,9 +53,11 @@ const updateCanvas = (props, elapsed) => {
 const renderCanvas = function (props) {
   let images = props.canvas.images,
       camera = props.canvas.camera,
+      select = props.canvas.context.selection,
       heroes = props.store.heroes.data;
   drawLayers(context, camera, loader.getImage(images, 'tiles'));
   drawHeroes(context, images, camera, heroes);
+  drawUI(context, select, heroes);
 };
 
 const _getMousePosition = (canvasSize, evt) => ({
@@ -98,11 +100,11 @@ const hoverSprite = (evt, props) => {
 };
 
 const clickSprite = (evt, props) => {
-  var found = [].concat(_selectSprite(evt, props))
-  if( found && props.canvas.context.highlight !== found) {
-    props.actions.context.setSelection(found);
+  var found = _selectSprite(evt, props)
+  if( found && props.canvas.context.selection[0] !== found) {
+    props.actions.context.setSelection([].concat(found));
   } else {
-    props.actions.context.setSelection(null);
+    props.actions.context.setSelection([]);
   }
 }
 

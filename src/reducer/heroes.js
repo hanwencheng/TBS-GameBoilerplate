@@ -1,21 +1,27 @@
 import _ from 'lodash';
 import {heroes as types} from './actionTypes';
+import map from '../engine/tiles';
+
+const scaleWidth = map.tilewidth;
+const scaleHeihgt = map.tileheight;
 
 const initDataSet = {
   data: {
     zhangfei: {
       sprite: 'zhangfei',
       x:2,
-      y:30,
+      y:3,
       height:64,
       width:48,
+      movement: 2,
     },
     zhaoyun:   {
       sprite: 'zhaoyun',
-      x:505,
+      x:15,
       y:14,
       height:64,
       width:48,
+      movement: 3,
     }
   },
   sortedMap: []
@@ -23,10 +29,10 @@ const initDataSet = {
 
 const objectIntoArray = (result, object, key) => {
   result.push({
-    left: object.x,
-    right: object.x + object.width,
-    top: object.y,
-    bottom: object.y + object.height,
+    left: object.x * scaleWidth,
+    right: ( object.x + 1 ) * scaleWidth,
+    top: object.y * scaleHeihgt,
+    bottom: ( object.y + 1 ) * scaleHeihgt,
     id: key});
   return result
 };

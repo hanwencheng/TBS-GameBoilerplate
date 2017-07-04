@@ -31,7 +31,7 @@ class App extends Component {
           <Self />
           <Canvas/>
           <Enemy/>
-          <div className="App-enemy">
+          <div >
           </div>
         </div>
         <DevTools store={store}/>
