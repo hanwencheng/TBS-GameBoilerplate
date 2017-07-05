@@ -71,11 +71,11 @@ const drawHeroes = (canvas, store, camera, heroes) => {
   )
 }
 
-const drawUI = (canvas, select, heroes) => {
+const drawMove = (canvas, camera, select, heroes) => {
   if(select.length === 1){
     const unit = heroes[select[0]],
-      scaleX = unit.x * map.tilewidth,
-      scaleY = unit.y * map.tileheight,
+      scaleX = unit.x * map.tilewidth - camera.x,
+      scaleY = unit.y * map.tileheight - camera.y,
       range = unit.movement,
       maxX = scaleX + (range + 1) * map.tilewidth,
       minX = scaleX - range * map.tilewidth,
@@ -114,5 +114,5 @@ const drawUI = (canvas, select, heroes) => {
 export {
   drawLayers,
   drawHeroes,
-  drawUI,
+  drawMove,
 }

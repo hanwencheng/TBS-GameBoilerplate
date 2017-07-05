@@ -2,7 +2,7 @@ import Keyboard from '../core/keyboard';
 import {keyboard} from '../constant'
 import loader from '../core/loader'
 import {canvasSize, maximumDelta} from '../constant'
-import {drawLayers, drawHeroes, drawUI} from '../engine/render'
+import {drawLayers, drawHeroes, drawMove} from '../engine/render'
 import map from '../engine/tiles'
 import _ from 'lodash'
 
@@ -57,7 +57,7 @@ const renderCanvas = function (props) {
       heroes = props.store.heroes.data;
   drawLayers(context, camera, loader.getImage(images, 'tiles'));
   drawHeroes(context, images, camera, heroes);
-  drawUI(context, select, heroes);
+  drawMove(context, camera, select, heroes);
 };
 
 const _getMousePosition = (canvasSize, evt) => ({
