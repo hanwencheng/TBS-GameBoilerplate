@@ -1,14 +1,17 @@
 import Keyboard from '../core/keyboard';
 import {keyboard} from '../constant'
 import loader from '../core/loader'
-import {canvasSize, maximumDelta} from '../constant'
-import {drawLayers, drawHeroes, drawMove} from '../engine/render'
+import {canvasSize, maxDelta, maxFPS} from '../constant'
+import { default as Render} from '../engine/render'
 import map from '../engine/tiles'
 import _ from 'lodash'
 
 //module local state;
-let tileAtlas, canvasEl, context,
-  _previousElapsed = 0;
+let tileAtlas, canvasEl, canvasContext,
+  _previousElapsed = 0, delta = 0, tick = 0,
+  fps = 30,
+  framesThisSecond = 0,
+  lastFpsUpdate = 0;;
 
 const _updateMove = (props, delta) => {
   // handle camera movement with arrow keys
@@ -22,16 +25,25 @@ const _updateMove = (props, delta) => {
   props.actions.camera.move(delta, dirx, diry)
 };
 
-const _updateCanvas = () => {
+const _updateFrame = (props) => {
+
+}
+
+const _panic = () => {
+  tick = 0;
+  delta = 0;
+}
+
+const _clearCanvas = () => {
   // clear previous frame TODO tobe optimized
-  context.clearRect(0, 0, canvasSize, canvasSize);
+  canvasContext.clearRect(0, 0, canvasSize, canvasSize);
 }
 
 const setContextSize = (props) => props.actions.context.setSize(canvasEl.getBoundingClientRect())
 
 const initCanvas = function (props) {
   canvasEl = document.getElementById('demo');
-  context = canvasEl.getContext('2d');
+  canvasContext = canvasEl.getContext('2d');
   Keyboard.registerKey(
     [keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
   tileAtlas = loader.getImage(props.canvas.images, 'tiles');
@@ -39,26 +51,50 @@ const initCanvas = function (props) {
   setContextSize(props);
 };
 
-const updateCanvas = (props, elapsed) => {
+const _updateTick = (props) => {
+  if(++tick >= 15){
+    props.actions.context.tick();
+    tick = 0;
+  }
+}
 
-  // compute delta time in seconds -- also cap it
-  var delta = (elapsed - _previousElapsed) / 1000.0;
-  delta = Math.min(delta, maximumDelta); // maximum delta of 250 ms
-  _previousElapsed = elapsed;
 
-  _updateCanvas()
+const _updateCanvas = (props, delta) => {
+  _updateTick(props);
   _updateMove(props, delta);
 }
 
-const renderCanvas = function (props) {
+const _drawCanvas = function (props) {
+  _clearCanvas()
   let images = props.canvas.images,
       camera = props.canvas.camera,
-      select = props.canvas.context.selection,
+      context = props.canvas.context,
       heroes = props.store.heroes.data;
-  drawLayers(context, camera, loader.getImage(images, 'tiles'));
-  drawHeroes(context, images, camera, heroes);
-  drawMove(context, camera, select, heroes);
+  Render.drawLayers(canvasContext, camera, loader.getImage(images, 'tiles'));
+  Render.drawHeroes(canvasContext, images, context, camera, heroes);
+  Render.drawMove(canvasContext, camera, context, heroes);
 };
+
+const draw = (props, elapsed) => {
+  //calculate the fps
+
+  // Throttle the frame rate.
+  // Time step should much bigger that refresh rat to avoid spiral death.
+  if (elapsed < _previousElapsed + 1000 / maxFPS) {
+    return;
+  }
+
+  // compute delta time in seconds -- also cap it
+  delta = elapsed - _previousElapsed; // maximum delta of 250 ms
+  delta = Math.min(delta, 1000 / maxFPS)
+  _updateCanvas(props, delta);
+  _drawCanvas(props);
+
+  _previousElapsed = elapsed;
+};
+
+
+//================== UI functions =====================
 
 const _getMousePosition = (canvasSize, evt) => ({
   x: evt.clientX - canvasSize.left,
@@ -108,11 +144,43 @@ const clickSprite = (evt, props) => {
   }
 }
 
+const backUpDraw = (props, elapsed) => {
+  //calculate the fps
+  if (elapsed > lastFpsUpdate + 1000) { // update every second
+    fps = 0.25 * framesThisSecond + (1 - 0.25) * fps; // compute the new FPS
+
+    lastFpsUpdate = elapsed;
+    framesThisSecond = 0;
+  }
+  framesThisSecond++;
+
+  // Throttle the frame rate.
+  // Time step should much bigger that refresh rat to avoid spiral death.
+  const timeStep = 1000 / fps
+  if (elapsed < _previousElapsed + 1000/fps) {
+    return;
+  }
+
+  // compute delta time in seconds -- also cap it
+  delta += elapsed - _previousElapsed; // maximum delta of 250 ms
+  while(delta > timeStep){
+    _updateCanvas(props, timeStep);
+    delta -= timeStep
+
+    if (++tick >= 240) {
+      _panic(); // fix things
+      break; // bail out
+    }
+  }
+
+  _drawCanvas(props);
+  _previousElapsed = elapsed;
+};
+
 
 export {
-  updateCanvas,
+  draw,
   initCanvas,
-  renderCanvas,
   hoverSprite,
   setContextSize,
   clickSprite

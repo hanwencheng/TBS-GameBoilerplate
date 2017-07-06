@@ -13,6 +13,7 @@ const initDataSet = {
       y:3,
       height:64,
       width:48,
+      animation: 4,
       movement: 2,
     },
     zhaoyun:   {
@@ -20,6 +21,7 @@ const initDataSet = {
       x:15,
       y:14,
       height:64,
+      animation: 4,
       width:48,
       movement: 3,
     }

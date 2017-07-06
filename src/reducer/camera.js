@@ -8,7 +8,7 @@ const getMaxY = (map, height) => map.height * map.tileheight - height
 
 
 const camera = (state = {
-  SPEED: 256,// pixels per second
+  SPEED: 0.25,// pixels per second
   x: 0,
   y: 0,
   width: 0,

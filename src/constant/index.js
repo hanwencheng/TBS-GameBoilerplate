@@ -1,5 +1,6 @@
 const canvasSize = 640
-const maximumDelta = 1/30
+const maxDelta = 1/30
+const maxFPS = 30
 
 const keyboard = {
   LEFT: 37,
@@ -10,7 +11,8 @@ const keyboard = {
 
 export {
   canvasSize,
-  maximumDelta,
+  maxDelta,
   keyboard,
+  maxFPS,
 }
 

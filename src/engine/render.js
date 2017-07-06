@@ -45,7 +45,7 @@ const drawLayers = function (canvas, camera, atlas) {
 
 };
 
-const drawHeroes = (canvas, store, camera, heroes) => {
+const drawHeroes = (canvas, store, context, camera, heroes) => {
   _.forIn(heroes, (hero, heroId) => {
     const scaleX = hero.x * map.tilewidth;
     const scaleY = hero.y * map.tileheight;
@@ -56,11 +56,13 @@ const drawHeroes = (canvas, store, camera, heroes) => {
     if(offsetX < -hero.width || offsetY < -hero.height)
       return;
 
+    const frame = context.tick % hero.animation
+
     canvas.drawImage(
       image,
+      hero.width * frame,
       0,
-      0,
-      hero.width,
+      hero.width ,
       hero.height,
       offsetX,
       offsetY,
@@ -71,7 +73,8 @@ const drawHeroes = (canvas, store, camera, heroes) => {
   )
 }
 
-const drawMove = (canvas, camera, select, heroes) => {
+const drawMove = (canvas, camera, context, heroes) => {
+  const select = context.selection
   if(select.length === 1){
     const unit = heroes[select[0]],
       scaleX = unit.x * map.tilewidth - camera.x,
@@ -80,38 +83,41 @@ const drawMove = (canvas, camera, select, heroes) => {
       maxX = scaleX + (range + 1) * map.tilewidth,
       minX = scaleX - range * map.tilewidth,
       maxY = scaleY + (range + 1) * map.tileheight,
-      minY = scaleY - range * map.tileheight;
+      minY = scaleY - range * map.tileheight,
+      edges = (3 + ( range - 1 ) * 2) * 4 ;
       let towardRight = true,
-      towardBottom = false,
-      isXChange = true,
-      pointerX = scaleX,
-      pointerY = scaleY - range * map.tileheight;
+      towardBottom = true,
+      isXChange = false,
+      pointerX = scaleX + map.tilewidth,
+      pointerY = scaleY - range * map.tileheight,
+        start = 0;
 
     canvas.fillStyle = "rgba(255, 0, 0, 0.5)";
     canvas.beginPath();
+    console.log('map is', map)
     canvas.moveTo(pointerX, pointerY)
     do{
       if(isXChange){
-        if(pointerX === maxX || pointerX === minX)
+        if((start === edges / 4) || (start === edges / 4 * 3))
           towardRight = !towardRight;
         pointerX += towardRight ? map.tilewidth : - map.tilewidth;
       } else {
-        if(pointerY === maxY || pointerY === minY)
+        if(start === edges / 2 )
           towardBottom = !towardBottom;
         pointerY += towardBottom ? map.tileheight : - map.tileheight;
       }
       isXChange = !isXChange;
       canvas.lineTo(pointerX, pointerY)
-    } while (
-      pointerX !== scaleX ||
-      pointerY !==scaleY - range * map.tileheight)
+      start++
+      console.log('start is', start)
+    } while (start < edges)
 
     canvas.closePath();
     canvas.fill();
   }
 }
 
-export {
+export default {
   drawLayers,
   drawHeroes,
   drawMove,

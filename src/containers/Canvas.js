@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Canvas.css';
 import Container from '../core/playground';
-import {canvasSize, maximumDelta} from '../constant'
+import {canvasSize, maxDelta} from '../constant'
 import _ from 'lodash'
 import hanwenc from '../hanwen'
 import loader from '../core/loader'
@@ -25,8 +25,7 @@ class Canvas extends Component {
 
     const tick = (elapsed) => {
       window.requestAnimationFrame(tick);
-      canvasUtil.updateCanvas(that.props, elapsed);
-      canvasUtil.renderCanvas(that.props);
+      canvasUtil.draw(that.props, elapsed);
     }
 
     Promise.all(p).then(function (loaded) {
