@@ -26,7 +26,8 @@ const heroes = {
 const context = {
   setSize: (size) => ({type: types.context.setSize, size}),
   setSelection: (ids) => ({type: types.context.setSelection, ids}),
-  setHighlight: (id) => ({type: types.context.setHighlight, id})
+  setHighlight: (id) => ({type: types.context.setHighlight, id}),
+  tick: ()=> ({type: types.context.tick})
 }
 
 export default {

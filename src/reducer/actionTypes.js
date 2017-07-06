@@ -18,6 +18,7 @@ const context = {
   setSize: 'CONTEXT_setSize',
   setSelection: 'CONTEXT_setSelection',
   setHighlight: 'CONTEXT_setHighlight',
+  tick: 'CONTEXT_tick',
 }
 
 const actionTypes = {
