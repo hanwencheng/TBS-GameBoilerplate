@@ -11,7 +11,8 @@ const images = {
 }
 
 const heroes = {
-  init: 'HEROES_init'
+  init: 'HEROES_init',
+  setTarget: 'HEROS_setTarget',
 }
 
 const context = {

@@ -7,7 +7,7 @@ const contextReducer = (state = {
   },
   tick: 0,
   highlight: null,
-  selection: []
+  selection: null,
 }, action) => {
   switch (action.type){
     case types.setSize:
@@ -27,7 +27,7 @@ const contextReducer = (state = {
 
     case types.setSelection:
       return {...state,
-        selection: action.ids
+        selection: action.id
       }
     default:
       return state;

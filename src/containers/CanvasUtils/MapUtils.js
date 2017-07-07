@@ -58,8 +58,8 @@ const _drawCanvas = function (props) {
       context = props.canvas.context,
       heroes = props.store.heroes.data;
   Render.drawLayers(canvasContext, camera, loader.getImage(images, 'tiles'));
-  Render.drawHeroes(canvasContext, images, context, camera, heroes);
-  Render.drawMove(canvasContext, camera, context, heroes);
+  Render.drawHeroes(canvasContext, images, context, camera, heroes, delta);
+  Render.drawMoveRange(canvasContext, camera, context, heroes);
 };
 
 const setContextSize = (props) => props.actions.context.setSize(canvasEl.getBoundingClientRect())
@@ -79,9 +79,9 @@ const draw = (props, elapsed) => {
 
   // Throttle the frame rate.
   // Time step should much bigger that refresh rat to avoid spiral death.
-  if (elapsed < _previousElapsed + 1000 / maxFPS) {
-    return;
-  }
+  // if (elapsed < _previousElapsed + 1000 / maxFPS) {
+  //   return;
+  // }
 
   // compute delta time in seconds -- also cap it
   delta = elapsed - _previousElapsed; // maximum delta of 250 ms

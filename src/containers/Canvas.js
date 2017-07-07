@@ -6,8 +6,9 @@ import _ from 'lodash'
 import hanwenc from '../hanwen'
 import loader from '../core/loader'
 import sprites from '../engine/sprites';
-import * as canvasUtils from './CanvasUtils/CanvasUtils';
+import canvasUtils from './CanvasUtils';
 
+console.log('utils', canvasUtils)
 class Canvas extends Component {
 
   constructor(props){

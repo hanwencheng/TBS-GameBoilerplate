@@ -21,11 +21,12 @@ const images = {
 
 const heroes = {
   init: (spriteList) => ({type: types.heroes.init, spriteList}),
+  setTarget: (id, target) => ({type: types.heroes.setTarget, id, target}),
 }
 
 const context = {
   setSize: (size) => ({type: types.context.setSize, size}),
-  setSelection: (ids) => ({type: types.context.setSelection, ids}),
+  setSelection: (id) => ({type: types.context.setSelection, id}),
   setHighlight: (id) => ({type: types.context.setHighlight, id}),
   tick: ()=> ({type: types.context.tick})
 }

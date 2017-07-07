@@ -7,21 +7,21 @@ const Enemy = (props) => {
       highLightSprite = highLightId ?
         props.store.heroes.data[highLightId] : {};
   let selectionId = props.canvas.context.selection,
-    selectionSprite = selectionId.length ?
-      props.store.heroes.data[selectionId[0]] : {}; //TODO
+    selectionSprite = highLightId ?
+      props.store.heroes.data[selectionId] : {};
   return (
     <div className="App-enemy">
       <div >
         Hover :
       {_.map(highLightSprite, (value, key)=> (
-        <div>{key} : {value}</div>
+        <div>{key} : {JSON.stringify(value)}</div>
       ))}
       </div>
-
+]
       <div>
         Select :
       {_.map(selectionSprite, (value, key)=> (
-        <div>{key} : {value}</div>
+        <div>{key} : {JSON.stringify(value)}</div>
       ))}
       </div>
     </div>
