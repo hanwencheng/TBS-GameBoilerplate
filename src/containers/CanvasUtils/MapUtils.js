@@ -1,22 +1,21 @@
-import Keyboard from '../core/keyboard';
-import {keyboard} from '../constant'
-import loader from '../core/loader'
-import {canvasSize, maxDelta, maxFPS} from '../constant'
-import { default as Render} from '../engine/render'
-import map from '../engine/tiles'
+import Keyboard from '../../core/keyboard';
+import { default as Render} from '../../engine/render'
+import map from '../../engine/tiles'
+import loader from '../../core/loader'
+import {keyboard, canvasSize, maxDelta, maxFPS} from '../../constant/index'
 import _ from 'lodash'
 
 //module local state;
 let tileAtlas, canvasEl, canvasContext,
-  _previousElapsed = 0, delta = 0, tick = 0,
-  fps = 30,
-  framesThisSecond = 0,
-  lastFpsUpdate = 0;;
+    _previousElapsed = 0, delta = 0, tick = 0,
+    fps = 30,
+    framesThisSecond = 0,
+    lastFpsUpdate = 0;
 
 const _updateMove = (props, delta) => {
   // handle camera movement with arrow keys
-  var dirx = 0;
-  var diry = 0;
+  let dirx = 0;
+  let diry = 0;
   if (Keyboard.isDown(keyboard.LEFT)) { dirx = -1; }
   if (Keyboard.isDown(keyboard.RIGHT)) { dirx = 1; }
   if (Keyboard.isDown(keyboard.UP)) { diry = -1; }
@@ -38,18 +37,6 @@ const _clearCanvas = () => {
   // clear previous frame TODO tobe optimized
   canvasContext.clearRect(0, 0, canvasSize, canvasSize);
 }
-
-const setContextSize = (props) => props.actions.context.setSize(canvasEl.getBoundingClientRect())
-
-const initCanvas = function (props) {
-  canvasEl = document.getElementById('demo');
-  canvasContext = canvasEl.getContext('2d');
-  Keyboard.registerKey(
-    [keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
-  tileAtlas = loader.getImage(props.canvas.images, 'tiles');
-  props.actions.camera.init(map, canvasSize, canvasSize)
-  setContextSize(props);
-};
 
 const _updateTick = (props) => {
   if(++tick >= 15){
@@ -75,6 +62,18 @@ const _drawCanvas = function (props) {
   Render.drawMove(canvasContext, camera, context, heroes);
 };
 
+const setContextSize = (props) => props.actions.context.setSize(canvasEl.getBoundingClientRect())
+
+const initCanvas = function (props) {
+  canvasEl = document.getElementById('demo');
+  canvasContext = canvasEl.getContext('2d');
+  Keyboard.registerKey(
+      [keyboard.LEFT, keyboard.RIGHT, keyboard.UP, keyboard.DOWN]);
+  tileAtlas = loader.getImage(props.canvas.images, 'tiles');
+  props.actions.camera.init(map, canvasSize, canvasSize)
+  setContextSize(props);
+};
+
 const draw = (props, elapsed) => {
   //calculate the fps
 
@@ -93,56 +92,17 @@ const draw = (props, elapsed) => {
   _previousElapsed = elapsed;
 };
 
-
-//================== UI functions =====================
-
-const _getMousePosition = (canvasSize, evt) => ({
-  x: evt.clientX - canvasSize.left,
-  y: evt.clientY - canvasSize.top,
-})
-
-const _isInSprite = (sprites, mousePosition, camera) => {
-  let relateX = mousePosition.x + camera.x;
-  let relateY = mousePosition.y + camera.y;
-  return (
-  sprites.left <= relateX &&
-  relateX <= sprites.right &&
-  sprites.top <= relateY &&
-  relateY <= sprites.bottom
-  )
-}
-
-const _selectSprite = (evt, props) => {
-  var mousePos = _getMousePosition(props.canvas.context.size, evt);
-  var rectList = props.store.heroes.sortedMap
-  var found;
-  for(let i = rectList.length - 1; i >= 0 ;i-- ){
-    let rect = rectList[i];
-    if(_isInSprite(rect, mousePos, props.canvas.camera)){
-      found = rect.id
-      break;
-    }
-  }
-  return found
+export default {
+  draw,
+  setContextSize,
+  initCanvas,
 }
 
 
-const hoverSprite = (evt, props) => {
-  var found = _selectSprite(evt, props)
-  if ( found && props.canvas.context.highlight !== found){
-    props.actions.context.setHighlight(found);
-  }
-  return found;
-};
 
-const clickSprite = (evt, props) => {
-  var found = _selectSprite(evt, props)
-  if( found && props.canvas.context.selection[0] !== found) {
-    props.actions.context.setSelection([].concat(found));
-  } else {
-    props.actions.context.setSelection([]);
-  }
-}
+
+
+
 
 const backUpDraw = (props, elapsed) => {
   //calculate the fps
@@ -176,12 +136,3 @@ const backUpDraw = (props, elapsed) => {
   _drawCanvas(props);
   _previousElapsed = elapsed;
 };
-
-
-export {
-  draw,
-  initCanvas,
-  hoverSprite,
-  setContextSize,
-  clickSprite
-}

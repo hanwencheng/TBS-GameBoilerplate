@@ -6,7 +6,7 @@ import _ from 'lodash'
 import hanwenc from '../hanwen'
 import loader from '../core/loader'
 import sprites from '../engine/sprites';
-import * as canvasUtil from './starter';
+import * as canvasUtils from './CanvasUtils/CanvasUtils';
 
 class Canvas extends Component {
 
@@ -15,7 +15,7 @@ class Canvas extends Component {
   }
 
   updateContextDimension = () => {
-    canvasUtil.setContextSize(this.props)
+    canvasUtils.setContextSize(this.props)
   }
 
   componentDidMount(){
@@ -25,12 +25,12 @@ class Canvas extends Component {
 
     const tick = (elapsed) => {
       window.requestAnimationFrame(tick);
-      canvasUtil.draw(that.props, elapsed);
+      canvasUtils.draw(that.props, elapsed);
     }
 
     Promise.all(p).then(function (loaded) {
       console.log('loaded are', loaded)
-      canvasUtil.initCanvas(that.props);
+      canvasUtils.initCanvas(that.props);
       window.addEventListener("resize", that.updateContextDimension);
       window.requestAnimationFrame(tick);
     });
@@ -43,8 +43,8 @@ class Canvas extends Component {
 
   render(){
 
-    const onMouseMove = _.partial(canvasUtil.hoverSprite, _, this.props)
-    const onClick = _.partial(canvasUtil.clickSprite, _, this.props)
+    const onMouseMove = _.partial(canvasUtils.onHover, _, this.props)
+    const onClick = _.partial(canvasUtils.onClick, _, this.props)
 
     return (
       <div className = "App-canvas" id="canvas">
