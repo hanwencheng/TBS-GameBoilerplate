@@ -23,6 +23,7 @@ class App extends Component {
   render(){
     return (
       <div className="App">
+        <DevTools store={store}/>
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to SanPlay</h2>
@@ -34,7 +35,6 @@ class App extends Component {
           <div >
           </div>
         </div>
-        <DevTools store={store}/>
       </div>
     )
   }
