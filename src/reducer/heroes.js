@@ -3,11 +3,11 @@ import {heroes as types} from './actionTypes';
 import map from '../engine/tiles';
 import update from 'immutability-helper';
 
-const set = (obj, path, value) => {
-  var rt = _.assign({}, obj)
-  _.set(rt, path, value)
-  return rt;
-}
+const set = (state, id, changeMap) => update(state, {
+  data:{
+    [id]: changeMap
+  }
+});
 
 const scaleWidth = map.tilewidth;
 const scaleHeihgt = map.tileheight;
@@ -25,7 +25,7 @@ const initDataSet = {
       animation: 4,
       movement: 2,
       movePoint: 2,
-      target: null,
+      path: null,
       selectable: true,
       isMoving: false,
     },
@@ -40,7 +40,7 @@ const initDataSet = {
       width:48,
       movement: 3,
       movePoint: 3,
-      target: null,
+      path: null,
       selectable: true,
       isMoving: false,
     }
@@ -71,16 +71,17 @@ const heroes = (state = initDataSet, action ) => {
   switch (action.type){
     case types.init:
       return state;
-    case types.setTarget:
+    case types.setPath:
       console.log(state[action.id])
-      return update(state, {
-        data:{
-          [action.id]: {
-            selectable: {$set: false},
-            target: {$set: action.target},
-            isMoving: {$set: true},
-          }
-        }
+      return set(state, action.id,  {
+        selectable: {$set: false},
+        path: {$set: action.path},
+        isMoving: {$set: true},
+      })
+    case types.move:
+      return set(state, action.id, {
+        pixelX: {$set: action.pixelX},
+        pixelY: {$set: action.pixelY},
       })
     case types.finishMove:
       return state

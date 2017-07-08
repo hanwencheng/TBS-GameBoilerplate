@@ -1,9 +1,8 @@
-import Keyboard from '../../core/keyboard';
-import { default as Render} from '../../engine/render'
-import map from '../../engine/tiles'
-import loader from '../../core/loader'
-import {keyboard, canvasSize, maxDelta, maxFPS} from '../../constant/index'
-import _ from 'lodash'
+import Keyboard from "../core/keyboard";
+import {default as Render} from "../engine/render";
+import map from "../engine/tiles";
+import loader from "../core/loader";
+import {keyboard, canvasSize, maxDelta, maxFPS} from "../constant/index";
 
 //module local state;
 let tileAtlas, canvasEl, canvasContext,

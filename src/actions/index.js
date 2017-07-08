@@ -21,7 +21,8 @@ const images = {
 
 const heroes = {
   init: (spriteList) => ({type: types.heroes.init, spriteList}),
-  setTarget: (id, target) => ({type: types.heroes.setTarget, id, target}),
+  setPath: (id, path) => ({type: types.heroes.setPath, id, path}),
+  move: (pixelX, pixelY) => ({type: types.heroes.move, pixelX, pixelY})
 }
 
 const context = {
