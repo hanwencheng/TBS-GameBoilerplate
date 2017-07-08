@@ -51,37 +51,32 @@ const _reduceDelta = (props, delta, unit) => {
   let restDistance = delta * movingSpeed.hero;
 
   while (restDistance > 0) {
-    let path
+    let path = unit.path;
+    let target = _.head(path)
+
+    let currentX = unit.pixelX,
+      currentY = unit.pixelY,
+      newX = currentX,
+      newY = currentY,
+      targetDelta;
+
     const deltaDirection = canvasHelper.tileMinus(target, {x:unit.x, y: unit.y})
     const targetPosition = canvasHelper.tileToPosition(target);
-  }
-
-
-  const newPath = _.reduce(unit.path, (oldPosition, target) => {
-    if(restDistance > 0) {
-
-
-      const calculated = _.assign({}, oldPosition);
-      let targetDelta;
-      if(deltaDirection.x !== 0) {
-        targetDelta = Math.abs(targetPosition.x - oldPosition.pixelX)
-        if(restDistance >= targetDelta){
-          calculated.x += targetDelta * deltaDirection.x
-          restDistance -= targetDelta
-          // props.actions.heroes.setPosition(unit.id, target)
-        }else{
-          calculated.x = targetPosition.x
-          restDistance = 0
-        }
+    if(deltaDirection.x !== 0) {
+      targetDelta = Math.abs(targetPosition.x - currentX)
+      if(restDistance >= targetDelta){
+        newX += targetDelta * deltaDirection.x
+        restDistance -= targetDelta
+        // props.actions.heroes.setPosition(unit.id, target)
+      }else{
+        newX = targetPosition.x
+        restDistance = 0
       }
+    } else if(deltaDirection.y !== 0){
 
-      if(deltaDirection.y !== 0){
-
-      }
-    } else{
-      return oldPosition
     }
-  }, {x: unit.pixelX, y: unit.pixelY})
+  }
+  
 }
 
 const drawHeroes = (canvas, store, context, camera, heroes, delta) => {
