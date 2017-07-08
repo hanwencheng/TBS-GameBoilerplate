@@ -72,16 +72,22 @@ const heroes = (state = initDataSet, action ) => {
     case types.init:
       return state;
     case types.setPath:
-      console.log(state[action.id])
+      console.log('setPath', action)
       return set(state, action.id,  {
         selectable: {$set: false},
         path: {$set: action.path},
         isMoving: {$set: true},
       })
     case types.move:
+      console.log('changing position with action', action)
       return set(state, action.id, {
         pixelX: {$set: action.pixelX},
         pixelY: {$set: action.pixelY},
+      })
+    case types.setPosition:
+      return set(state, action.id, {
+        x: {$set: action.x},
+        y: {$set: action.y},
       })
     case types.finishMove:
       return state

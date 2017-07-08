@@ -1,8 +1,8 @@
 import map from '../engine/tiles';
 
-const tileToPosition = (x, y) => ({
-  x: x * map.tilewidth,
-  y: y * map.tileheight,
+const tileToPosition = (tile) => ({
+  x: tile.x * map.tilewidth,
+  y: tile.y * map.tileheight,
 })
 
 const compare = (x, y) => {

@@ -12,8 +12,10 @@ const images = {
 
 const heroes = {
   init: 'HEROES_init',
-  setPath: 'HEROS_setPath',
+  setPath: 'HEROES_setPath',
   move: 'HEROES_move',
+  setPosition: 'HEROES_setPosition',
+  finishMove: 'HEROES_finishMove',
 }
 
 const context = {

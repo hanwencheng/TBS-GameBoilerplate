@@ -2,7 +2,7 @@ import map from './tiles'
 import loader from '../core/loader';
 import _ from 'lodash'
 import {movingSpeed} from '../constant'
-import {canvasHelper} from '../canvas/canvasHelper'
+import canvasHelper from '../canvas/canvasHelper'
 
 const getTile = (map, layer, col, row) => {
   return layer.data[map.width * row + col]
@@ -47,12 +47,14 @@ const drawLayers = function (canvas, camera, atlas) {
 
 };
 
-const _reduceDelta = (props, delta, unit) => {
+const _reduceDelta = (delta, unit, actions, heroId) => {
   let restDistance = delta * movingSpeed.hero;
 
   while (restDistance > 0) {
     let path = unit.path;
-    let target = _.head(path)
+    if(path.length === 0)
+      break;
+    let target = {x: _.head(path)[0], y: _.head(path)[1]}
 
     let currentX = unit.pixelX,
       currentY = unit.pixelY,
@@ -65,35 +67,49 @@ const _reduceDelta = (props, delta, unit) => {
     if(deltaDirection.x !== 0) {
       targetDelta = Math.abs(targetPosition.x - currentX)
       if(restDistance >= targetDelta){
-        newX += targetDelta * deltaDirection.x
-        restDistance -= targetDelta
-        // props.actions.heroes.setPosition(unit.id, target)
-      }else{
         newX = targetPosition.x
+        restDistance -= targetDelta
+        //set Position
+        actions.heroes.setPosition(heroId, target.x, target.y)
+        unit.path.shift()
+        actions.heroes.setPath(heroId, unit.path)
+        unit.x = target.x;
+        unit.y = target.y;
+      }else{
+        newX += restDistance * deltaDirection.x
         restDistance = 0
       }
     } else if(deltaDirection.y !== 0){
-
+      targetDelta = Math.abs(targetPosition.y - currentY)
+      if(restDistance >= targetDelta){
+        newY = targetPosition.y
+        restDistance -= targetDelta
+        //set Position
+        actions.heroes.setPosition(heroId, target.x, target.y)
+        unit.path.shift()
+        actions.heroes.setPath(heroId, unit.path)
+        unit.x = target.x;
+        unit.y = target.y;
+      }else{
+        newY += restDistance * deltaDirection.y
+        restDistance = 0
+      }
     }
+    actions.heroes.move(heroId, newX, newY)
+    unit.pixelX = newX;
+    unit.pixelY = newY;
+    //set Pixel X, and Y
   }
   
 }
 
-const drawHeroes = (canvas, store, context, camera, heroes, delta) => {
+const drawHeroes = (canvas, store, context, camera, heroes, delta, actions) => {
   _.forIn(heroes, (hero, heroId) => {
     if(hero.isMoving){
-      // const deltaX = hero.target.x * map.tileheight - hero.pixelX;
-      // const deltaY = hero.target.y * map.tilewidth - hero.pixelY;
-      // if(deltaX > 0){
-      //    props.actions.heroes.move(
-      //      Math.max(0, deltaX - delta * movingSpeed.hero), 0)
-      // }else if(deltaY > 0){
-      //   props.actions.heroes.move(
-      //     0, Math.max(0, deltaY - delta * movingSpeed.hero), )
-      // }
+      _reduceDelta(delta, hero, actions, heroId)
     }
-    const scaleX = hero.x * map.tilewidth;
-    const scaleY = hero.y * map.tileheight;
+    const scaleX = hero.pixelX;
+    const scaleY = hero.pixelY;
     let offsetX = scaleX - camera.x;
     let offsetY = scaleY - camera.y;
     let image = loader.getImage(store, hero.sprite);
@@ -140,7 +156,6 @@ const drawMoveRange = (canvas, camera, context, heroes) => {
 
       canvas.fillStyle = "rgba(255, 0, 0, 0.5)";
       canvas.beginPath();
-      console.log('map is', map)
       canvas.moveTo(pointerX, pointerY)
       do{
         if(isXChange){
@@ -155,7 +170,6 @@ const drawMoveRange = (canvas, camera, context, heroes) => {
         isXChange = !isXChange;
         canvas.lineTo(pointerX, pointerY)
         start++
-        console.log('start is', start)
       } while (start < edges)
 
       canvas.closePath();

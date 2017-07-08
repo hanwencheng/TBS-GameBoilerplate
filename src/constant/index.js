@@ -1,8 +1,8 @@
 const canvasSize = 640
-const maxDelta = 1/30
-const maxFPS = 30
+const maxDelta = 1/60
+const maxFPS = 60
 const movingSpeed = {
-  hero: 0.2
+  hero: 0.4
 }
 
 const keyboard = {

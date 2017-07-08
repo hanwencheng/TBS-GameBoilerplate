@@ -57,7 +57,7 @@ const _drawCanvas = function (props) {
       context = props.canvas.context,
       heroes = props.store.heroes.data;
   Render.drawLayers(canvasContext, camera, loader.getImage(images, 'tiles'));
-  Render.drawHeroes(canvasContext, images, context, camera, heroes, delta);
+  Render.drawHeroes(canvasContext, images, context, camera, heroes, delta, props.actions);
   Render.drawMoveRange(canvasContext, camera, context, heroes);
 };
 
