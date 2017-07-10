@@ -4,10 +4,13 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import {store} from './hanwen'
+import { MuiThemeProvider } from 'material-ui/styles';
 
 const render = () => {
   ReactDOM.render(
-    <App string="haha"/>
+    <MuiThemeProvider>
+      <App string="haha"/>
+    </MuiThemeProvider>
     , document.getElementById('root'));
   registerServiceWorker();
 }

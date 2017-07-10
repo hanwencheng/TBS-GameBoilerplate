@@ -142,10 +142,6 @@ const drawMoveRange = (canvas, camera, context, heroes) => {
       const scaleX = unit.x * map.tilewidth - camera.x,
         scaleY = unit.y * map.tileheight - camera.y,
         range = unit.movePoint,
-        maxX = scaleX + (range + 1) * map.tilewidth,
-        minX = scaleX - range * map.tilewidth,
-        maxY = scaleY + (range + 1) * map.tileheight,
-        minY = scaleY - range * map.tileheight,
         edges = (3 + ( range - 1 ) * 2) * 4 ;
       let towardRight = true,
         towardBottom = true,
