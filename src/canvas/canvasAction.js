@@ -51,10 +51,11 @@ const _tileToPath = (unit, target) => {
 
 const _isInclude = (props, target) => {
   const unit = _getUnit(props);
-  return (
+  const isInMovePoint = (
     Math.abs(target.x - unit.x) +
     Math.abs(target.y - unit.y)
   ) <= unit.movePoint
+  return unit.movePoint && isInMovePoint
 }
 
 const _isValidatePosition = (props, evt) => {

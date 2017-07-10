@@ -54,7 +54,6 @@ const _reduceDelta = (delta, unit, actions, heroId) => {
     let path = unit.path;
     if(path.length === 0)
       break;
-    let target = {x: _.head(path)[0], y: _.head(path)[1]}
 
     let currentX = unit.pixelX,
       currentY = unit.pixelY,
@@ -62,39 +61,39 @@ const _reduceDelta = (delta, unit, actions, heroId) => {
       newY = currentY,
       targetDelta;
 
+    const target = {x: _.head(path)[0], y: _.head(path)[1]}
     const deltaDirection = canvasHelper.tileMinus(target, {x:unit.x, y: unit.y})
     const targetPosition = canvasHelper.tileToPosition(target);
-    if(deltaDirection.x !== 0) {
-      targetDelta = Math.abs(targetPosition.x - currentX)
+
+    const _partialDirection = (deltaDirection, targetPosition, currentValue, newValue) => {
+      targetDelta = Math.abs(targetPosition - currentValue)
       if(restDistance >= targetDelta){
-        newX = targetPosition.x
+        newValue = targetPosition;
         restDistance -= targetDelta
-        //set Position
+        //set position
         actions.heroes.setPosition(heroId, target.x, target.y)
-        unit.path.shift()
-        actions.heroes.setPath(heroId, unit.path)
         unit.x = target.x;
         unit.y = target.y;
-      }else{
-        newX += restDistance * deltaDirection.x
-        restDistance = 0
-      }
-    } else if(deltaDirection.y !== 0){
-      targetDelta = Math.abs(targetPosition.y - currentY)
-      if(restDistance >= targetDelta){
-        newY = targetPosition.y
-        restDistance -= targetDelta
-        //set Position
-        actions.heroes.setPosition(heroId, target.x, target.y)
+        //set Path
         unit.path.shift()
         actions.heroes.setPath(heroId, unit.path)
-        unit.x = target.x;
-        unit.y = target.y;
+        if(_.isEmpty(unit.path)){
+          actions.heroes.finishMove(heroId)
+        }
       }else{
-        newY += restDistance * deltaDirection.y
+        newValue += restDistance * deltaDirection
         restDistance = 0
       }
+      return newValue
     }
+    if(deltaDirection.x !== 0) {
+      newX = _partialDirection(deltaDirection.x, targetPosition.x, currentX, newX);
+    } else if(deltaDirection.y !== 0){
+      newY = _partialDirection(deltaDirection.y, targetPosition.y, currentY, newY)
+    }
+    /**
+     * Be careful! move is after set Path and set Position!
+     */
     actions.heroes.move(heroId, newX, newY)
     unit.pixelX = newX;
     unit.pixelY = newY;
@@ -138,7 +137,7 @@ const drawMoveRange = (canvas, camera, context, heroes) => {
   const select = context.selection
   if(select){
     const unit = heroes[select];
-    if(!unit.isMoving){
+    if(!unit.isMoving && unit.movePoint){
       const scaleX = unit.x * map.tilewidth - camera.x,
         scaleY = unit.y * map.tileheight - camera.y,
         range = unit.movePoint,

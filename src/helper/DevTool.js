@@ -12,6 +12,7 @@ export default createDevTools(
     types.camera.move,
     types.context.setHighlight,
     types.context.tick,
+    types.heroes.move,
   ]}>
   <DockMonitor toggleVisibilityKey='ctrl-h'
                changePositionKey='ctrl-q'

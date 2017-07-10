@@ -88,9 +88,13 @@ const heroes = (state = initDataSet, action ) => {
       return set(state, action.id, {
         x: {$set: action.x},
         y: {$set: action.y},
+        movePoint: {$set:state.data[action.id].movePoint - 1}
       })
     case types.finishMove:
-      return state
+      return set(state, action.id, {
+        selectable: {$set: true},
+        isMoving: {$set: false},
+      })
     default : return state
   }
 }
