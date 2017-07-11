@@ -16,6 +16,7 @@ const heroes = {
   move: 'HEROES_move',
   setPosition: 'HEROES_setPosition',
   finishMove: 'HEROES_finishMove',
+  nextTurn: 'HEROES_nextTurn',
 }
 
 const context = {

@@ -24,7 +24,8 @@ const heroes = {
   setPath: (id, path) => ({type: types.heroes.setPath, id, path}),
   move: (id, pixelX, pixelY) => ({type: types.heroes.move, id, pixelX, pixelY}),
   setPosition: (id, x, y) => ({type: types.heroes.setPosition, id, x, y}),
-  finishMove: (id) => ({type: types.heroes.finishMove, id})
+  finishMove: (id) => ({type: types.heroes.finishMove, id}),
+  nextTurn: ()=>({type: types.heroes.nextTurn})
 }
 
 const context = {

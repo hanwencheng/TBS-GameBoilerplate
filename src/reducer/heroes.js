@@ -3,50 +3,41 @@ import {heroes as types} from './actionTypes';
 import map from '../engine/tiles';
 import update from 'immutability-helper';
 
-const set = (state, id, changeMap) => update(state, {
-  data:{
-    [id]: changeMap
-  }
-});
-
 const scaleWidth = map.tilewidth;
 const scaleHeihgt = map.tileheight;
 
 const initDataSet = {
-  data: {
-    zhangfei: {
-      sprite: 'zhangfei',
-      x:2,
-      y:3,
-      pixelX: 2 * scaleWidth,
-      pixelY: 3 * scaleWidth,
-      height:64,
-      width:48,
-      animation: 4,
-      movement: 2,
-      movePoint: 2,
-      path: null,
-      selectable: true,
-      isMoving: false,
-    },
-    zhaoyun:   {
-      sprite: 'zhaoyun',
-      x:15,
-      y:14,
-      pixelX: 15 * scaleWidth,
-      pixelY: 14 * scaleWidth,
-      height:64,
-      animation: 4,
-      width:48,
-      movement: 3,
-      movePoint: 3,
-      path: null,
-      selectable: true,
-      isMoving: false,
-    }
+  zhangfei: {
+    sprite: 'zhangfei',
+    x:2,
+    y:3,
+    pixelX: 2 * scaleWidth,
+    pixelY: 3 * scaleWidth,
+    height:64,
+    width:48,
+    animation: 4,
+    movement: 2,
+    movePoint: 2,
+    path: null,
+    selectable: true,
+    isMoving: false,
   },
-  sortedMap: []
-}
+  zhaoyun:   {
+    sprite: 'zhaoyun',
+    x:15,
+    y:14,
+    pixelX: 15 * scaleWidth,
+    pixelY: 14 * scaleWidth,
+    height:64,
+    animation: 4,
+    width:48,
+    movement: 3,
+    movePoint: 3,
+    path: null,
+    selectable: true,
+    isMoving: false,
+  }
+};
 
 const objectIntoArray = (result, object, key) => {
   result.push({
@@ -60,14 +51,37 @@ const objectIntoArray = (result, object, key) => {
   return result
 };
 
-const curriedGet = _.curryRight(_.get)({})('data')
 const curriedReduce = _.curryRight(_.reduce)([])(objectIntoArray)
 const curriedSort = _.curryRight(_.sortBy)((v)=> v.x);
-const sortData = _.flow(curriedGet, curriedReduce, curriedSort);
-initDataSet.sortedMap = sortData(initDataSet);
-console.log('initData set is', initDataSet.sortedMap);
+const sortData = _.flow(curriedReduce, curriedSort);
 
-const heroes = (state = initDataSet, action ) => {
+const initState = {
+  data: initDataSet,
+  sortedMap: sortData(initDataSet)
+}
+console.log('initData set is', initState.sortedMap);
+
+
+const set = (state, id, changeMap, shouldSort) => {
+  if(!shouldSort){
+    return update(state, {
+      data:{
+        [id]: changeMap
+      },
+    })
+  } else {
+    const newDataSet = update(state.data, {
+      [id]: changeMap
+    });
+    console.log('data set',newDataSet,'sorted data is', sortData(newDataSet))
+    return { ...state,
+      data: newDataSet,
+      sortedMap: sortData(newDataSet),
+    }
+  }
+}
+
+const heroes = (state = initState, action ) => {
   switch (action.type){
     case types.init:
       return state;
@@ -79,7 +93,6 @@ const heroes = (state = initDataSet, action ) => {
         isMoving: {$set: true},
       })
     case types.move:
-      console.log('changing position with action', action)
       return set(state, action.id, {
         pixelX: {$set: action.pixelX},
         pixelY: {$set: action.pixelY},
@@ -89,12 +102,19 @@ const heroes = (state = initDataSet, action ) => {
         x: {$set: action.x},
         y: {$set: action.y},
         movePoint: {$set:state.data[action.id].movePoint - 1}
-      })
+      }, true)
     case types.finishMove:
       return set(state, action.id, {
         selectable: {$set: true},
         isMoving: {$set: false},
       })
+    case types.nextTurn:
+      return {...state,
+        data: _.mapValues(state.data, (unit)=> {
+          unit.movePoint = unit.movement;
+          return unit
+        })
+      }
     default : return state
   }
 }

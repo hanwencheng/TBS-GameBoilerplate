@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {HeroInput} from '../basics'
+import {Button} from 'material-ui'
+import hanwenc from '../hanwen'
 
-const AppSelf = () => {
+const AppSelf = (props) => {
 
   const handleSubmit = (event) =>  {
     event.preventDefault();
@@ -14,6 +16,10 @@ const AppSelf = () => {
     }
   }
 
+  const onNextTurn = () => {
+    props.actions.heroes.nextTurn();
+  }
+
   return (
     <div className="App-self">
       <form onSubmit={handleSubmit} onKeyPress={onKeyPress}>
@@ -24,9 +30,11 @@ const AppSelf = () => {
         <HeroInput key="zhengzhi" type="number" symbol="政治" name="zhengzhi" value="45"/>
         <input onClick={handleSubmit} type="submit" value="Submit" />
       </form>
+
+      <Button raised color="primary" onClick={onNextTurn}>Next Turn</Button>
     </div>
   )
 
 }
 
-export default AppSelf;
+export default hanwenc(AppSelf);
