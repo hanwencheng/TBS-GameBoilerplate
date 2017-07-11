@@ -51,9 +51,12 @@ const objectIntoArray = (result, object, key) => {
   return result
 };
 
-const curriedReduce = _.curryRight(_.reduce)([])(objectIntoArray)
-const curriedSort = _.curryRight(_.sortBy)((v)=> v.x);
-const sortData = _.flow(curriedReduce, curriedSort);
+let cordReduce = (obj) => _.reduce(obj, objectIntoArray, [])
+let cordSort = (arr) => {
+  arr.sort((a, b) => a.left - b.left) ;
+  return arr.slice(0);
+}
+let sortData = _.flow(cordReduce, cordSort)
 
 const initState = {
   data: initDataSet,
@@ -70,10 +73,9 @@ const set = (state, id, changeMap, shouldSort) => {
       },
     })
   } else {
-    const newDataSet = update(state.data, {
+    let newDataSet = update(state.data, {
       [id]: changeMap
     });
-    console.log('data set',newDataSet,'sorted data is', sortData(newDataSet))
     return { ...state,
       data: newDataSet,
       sortedMap: sortData(newDataSet),
@@ -86,7 +88,6 @@ const heroes = (state = initState, action ) => {
     case types.init:
       return state;
     case types.setPath:
-      console.log('setPath', action)
       return set(state, action.id,  {
         selectable: {$set: false},
         path: {$set: action.path},
@@ -107,7 +108,7 @@ const heroes = (state = initState, action ) => {
       return set(state, action.id, {
         selectable: {$set: true},
         isMoving: {$set: false},
-      })
+      }, true)
     case types.nextTurn:
       return {...state,
         data: _.mapValues(state.data, (unit)=> {

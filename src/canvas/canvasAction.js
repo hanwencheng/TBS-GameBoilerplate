@@ -64,18 +64,6 @@ const _isValidatePosition = (props, evt) => {
   return _isInclude(props, target) ? target : null;
 };
 
-const onMove = (evt, props) => {
-  const unit = _getUnit(props);
-  if(!unit.isMoving){
-    const mousePos = _getMousePosition(props.canvas.context.size, props.canvas.camera, evt);
-    const target = helper.positionToTile(mousePos);
-    if(_isValidatePosition(unit, target)){
-      const path = _tileToPath(unit, target);
-      props.actions.heroes.setPath(props.canvas.context.selection, path)
-    }
-  }
-}
-
 const onHover = (evt, props) => {
   let found = _selectSprite(evt, props)
   if ( found && props.canvas.context.highlight !== found){
